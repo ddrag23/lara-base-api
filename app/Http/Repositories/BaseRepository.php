@@ -2,6 +2,8 @@
 
 namespace App\Http\Repositories;
 
+use App\Classes\BaseFilter;
+use App\Classes\BaseSearch;
 use App\Contracts\RepositoryContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,18 +14,24 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseRepository implements RepositoryContract
 {
-    protected string | Model $model;
+    protected Model $model;
     protected array $relation = [];
     protected array $detailRelation = [];
     protected array $countRelation = [];
+    protected array $allowedFilter = ['email'];
 
     function all(Request $request): Collection | LengthAwarePaginator
     {
-        $query = $this->model->when(count($this->relation) > 0, fn ($query) => $query->with($this->relation))->when(count($this->countRelation) > 0, function (Builder $builder) {
-            foreach ($this->countRelation as $key => $value) {
-                $builder->withCount($value);
-            }
-        })->latest();
+        $query = $this->model
+            ->when(count($this->relation) > 0, fn ($query) => $query->with($this->relation))
+            ->when(count($this->countRelation) > 0, function (Builder $builder) {
+                foreach ($this->countRelation as $key => $value) {
+                    $builder->withCount($value);
+                }
+            })
+            ->when($request->has('filters'), fn (Builder $builder) => (new BaseFilter($builder))->setAllowedFilter($this->allowedFilter)->filter($request))
+            ->when($request->has('search'), fn (Builder $builder) => (new BaseSearch($builder))->setAllowedField($this->allowedFilter)->search($request))
+            ->latest();
         return $this->runData($query, $request);
     }
     function create(mixed $payload): Model|Collection
