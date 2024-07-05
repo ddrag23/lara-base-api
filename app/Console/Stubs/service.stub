@@ -1,0 +1,11 @@
+<?php
+
+namespace {{ NAMESPACE }};
+
+use App\Http\Repositories\{{ REPO }};
+
+class {{ CLASS }} extends BaseService
+{
+    function __construct(protected {{ REPO }} $repository){
+    }
+}

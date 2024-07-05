@@ -1,0 +1,15 @@
+<?php
+
+namespace {{ NAMESPACE }};
+
+use App\Models\{{ MODEL }};
+
+class {{ CLASS }} extends BaseRepository
+{
+    protected array $relation = [];
+    protected array $detailRelation = [];
+    protected array $countRelation = [];
+    function __construct(){
+        parent::__construct(new {{ MODEL }});
+    }
+}
