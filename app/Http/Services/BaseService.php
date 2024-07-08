@@ -2,10 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\Contracts\RepositoryContract;
 use App\Contracts\ServiceContract;
 use App\Http\Repositories\BaseRepository;
-use App\Http\Repositories\UserRepository;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

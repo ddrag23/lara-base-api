@@ -18,7 +18,7 @@ abstract class BaseRepository implements RepositoryContract
     protected array $relation = [];
     protected array $detailRelation = [];
     protected array $countRelation = [];
-    protected array $allowedFilter = ['email'];
+    protected array $allowedFilter = [];
 
     function all(Request $request): Collection | LengthAwarePaginator
     {
