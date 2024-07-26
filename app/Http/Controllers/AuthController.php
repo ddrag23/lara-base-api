@@ -18,7 +18,7 @@ class AuthController extends Controller
             'password' => 'required|min:6|max:28',
         ]);
         if ($validator->fails()) {
-            return $this->generateResponse(ResponseConstant::INVALID);
+            return $this->generateResponse(ResponseConstant::INVALID, $validator->getMessageBag());
         }
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
